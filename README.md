@@ -8,7 +8,7 @@ MOOWONby kakaotalk bot
 
 - /League of Legends 전적/
 
-- 소환사명을 입력받아 [OP.GG](http://www.op.gg/)에서 전적 데이터를 파싱
+- - 소환사명을 입력받아 [OP.GG](http://www.op.gg/)에서 전적 데이터를 파싱
 
 - - 유저 랭크에 따라 해당 티어 이미지를 표시
 
@@ -27,6 +27,8 @@ MOOWONby kakaotalk bot
 - /시간표/
 
 - - 준비중
+
+
 
 ** 참조 자료 **
 # Eunyeoul Kakaotalk Mealbot with PHP
