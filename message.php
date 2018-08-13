@@ -803,7 +803,7 @@ EOD;
 echo <<< EOD
     {
         "message": {
-            "text": "전적이 필요한 소환사명을 검색해 주세요!\\nEX) L hide on bush"
+            "text": "전적이 필요한 소환사명을 검색해 주세요!\\nEX) skt t1 faker"
         }
     }
 EOD;
