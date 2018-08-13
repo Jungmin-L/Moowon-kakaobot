@@ -808,8 +808,8 @@ echo <<< EOD
     }
 EOD;
     }
-    else if ( strpos($content, "L") !== false ) {
-        $username = str_replace('L ', '', $content);
+    else if ( strpos($content, " ") !== false ) {
+        $username = str_replace(' ', '', $content);
         $return = lol_record($username);
         $logfile = fopen("log.txt", 'a') or die();
         fwrite($logfile, date("Y.m.d H:i:s",time()) . " '" . $username . "' 소환사를 검색했습니다(롤).\n");
