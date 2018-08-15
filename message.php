@@ -6,8 +6,25 @@
     $data = json_decode(file_get_contents('php://input'),true);
     $content = $data["content"];
 
+    // include 대화 start
+    if ( strcmp($content, "대화 start") == false ) {
+        echo json_encode(
+            array(
+                'message' => array(
+                    'text' => '안녕하세요. 무원고등학교 급식봇 입니다.',
+                ),
+                'keyboard' => array(
+                    'type' => 'buttons',
+                    'buttons' => array(
+                        '급식', '학사 일정', '시간표', '날씨', '게임 전적', '정보'
+                    )
+                )
+            )
+        );
+    }
+
     // include 돌아가기
-    if(strpos($content, "돌아가기") !== false){
+    else if(strpos($content, "돌아가기") !== false){
 echo <<< EOD
     {
         "message": {
@@ -15,7 +32,7 @@ echo <<< EOD
         },
         "keyboard": { 
             "type": "buttons",
-            "buttons": [ "급식", "학사 일정", "시간표", "날씨", "게임 전적", "개발자" ]
+            "buttons": [ "대화 start" ]
         }
     }
 EOD;
@@ -46,7 +63,7 @@ echo <<< EOD
         },
         "keyboard": { 
             "type": "buttons",
-            "buttons": ["급식", "학사 일정", "시간표", "날씨", "게임 전적", "개발자" ]
+            "buttons": ["오늘 급식", "내일 급식",  "모레 급식", "돌아가기" ]
         }
     }
 EOD;
@@ -62,7 +79,7 @@ echo <<< EOD
         },
         "keyboard": { 
             "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+            "buttons": [ "오늘 급식", "내일 급식",  "모레 급식", "돌아가기" ]
         }
     }
 EOD;
@@ -78,7 +95,7 @@ echo <<< EOD
         },
         "keyboard": { 
             "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+            "buttons": [ "오늘 급식", "내일 급식",  "모레 급식", "돌아가기" ]
         }
     }
 EOD;
@@ -93,7 +110,7 @@ echo <<< EOD
         },
         "keyboard": {
             "type": "buttons",
-            "buttons": [ "이번 달 학사일정", "다음 달 학사일정" ]
+            "buttons": [ "이번 달 학사일정", "다음 달 학사일정", "돌아가기" ]
         }
     }
 EOD;
@@ -110,7 +127,7 @@ echo <<< EOD
             },
             "keyboard" :{
                 "type" : "buttons",
-                "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+                "buttons": [ "이번 달 학사일정", "다음 달 학사일정", "돌아가기" ]
             }
         }
 EOD;
@@ -127,7 +144,7 @@ echo <<< EOD
             },
             "keyboard" :{
                 "type" : "buttons",
-                "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+                "buttons": ["이번 달 학사일정", "다음 달 학사일정", "돌아가기" ]
             }
         }
 EOD;
@@ -152,14 +169,47 @@ EOD;
     else if ( strpos($content, "오늘 날씨") !== false ) {
     $moowon = weather(0);
     $final = $moowon[0] . $moowon[1] . $moowon[2] . $moowon[3] . $moowon[4] . $moowon[5] . $moowon[6] . $moowon[7]. $moowon[8];
+    $pic_url2 = "http://minyeon.com/MOOWON/touch/weather/";
+
+    // <----- 하늘 날씨 상태 ---->
+    $sky = $moowon[4];
+    $sky = str_replace(":","",$sky);
+    $sky = str_replace(" ","",$sky);
+    // <----- 강수 상태 ---->
+    $rain = $moowon[5];
+    $rain = str_replace(":","",$rain);
+    $rain = str_replace(" ","",$rain);
+    // <----- 하늘 날씨 상태 통합 ---->
+    $sky = str_replace("하늘상태구름많음","cloud",$sky);
+    $sky = str_replace("하늘상태맑음","sun",$sky);
+    $sky = str_replace("하늘상태구름조금","cloud",$sky);
+    $sky = str_replace("하늘상태흐림","mist",$sky);
+    // <----- 강수 상태 통합 ---->
+    $rain = str_replace("강수상태강수없음","none",$rain);
+    $rain = str_replace("강수상태비가대부분이며일부눈","rain",$rain);
+    $rain = str_replace("강수상태비","rain",$rain);
+    $rain = str_replace("강수상태눈이대부분이며일부비","snow",$rain);
+    $rain = str_replace("강수상태눈","snow",$rain);
+    // <------ 이미지 로딩 ----->
+    if(strpos($rain,"none") !== false) {
+    $pic_url2 = $pic_url2.$sky.".png";
+  }
+  else{
+    $pic_url2 = $pic_url2.$rain.".png";
+  }
 echo <<< EOD
     {
         "message": {
-                "text": "$final"
+            "text": "$final",
+            "photo" : {
+                "url" : "$pic_url2",
+                "width" : 600,
+                "height" : 600
+            }
         },
         "keyboard" : {
             "type" : "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+            "buttons": [ "오늘 날씨",  "내일 날씨", "모레 날씨", "돌아가기"]
         }
     }
 EOD;
@@ -168,14 +218,47 @@ EOD;
     else if ( strpos($content, "내일 날씨") !== false ) {
     $moowon = weather(1);
     $final = $moowon[0] . $moowon[1] . $moowon[2] . $moowon[3] . $moowon[4] . $moowon[5] . $moowon[6] . $moowon[7]. $moowon[8];
+    $pic_url2 = "http://minyeon.com/MOOWON/touch/weather/";
+
+    // <----- 하늘 날씨 상태 ---->
+    $sky = $moowon[4];
+    $sky = str_replace(":","",$sky);
+    $sky = str_replace(" ","",$sky);
+    // <----- 강수 상태 ---->
+    $rain = $moowon[5];
+    $rain = str_replace(":","",$rain);
+    $rain = str_replace(" ","",$rain);
+    // <----- 하늘 날씨 상태 통합 ---->
+    $sky = str_replace("하늘상태구름많음","cloud",$sky);
+    $sky = str_replace("하늘상태맑음","sun",$sky);
+    $sky = str_replace("하늘상태구름조금","cloud",$sky);
+    $sky = str_replace("하늘상태흐림","mist",$sky);
+    // <----- 강수 상태 통합 ---->
+    $rain = str_replace("강수상태강수없음","none",$rain);
+    $rain = str_replace("강수상태비가대부분이며일부눈","rain",$rain);
+    $rain = str_replace("강수상태비","rain",$rain);
+    $rain = str_replace("강수상태눈이대부분이며일부비","snow",$rain);
+    $rain = str_replace("강수상태눈","snow",$rain);
+    // <----- 예외 처리 ------->
+    if(strpos($rain,"none") !== false) {
+    $pic_url2 = $pic_url2.$sky.".png";
+  }
+  else{
+    $pic_url2 = $pic_url2.$rain.".png";
+  }
 echo <<< EOD
     {
         "message": {
-            "text": "$final"
+            "text": "$final",
+            "photo" : {
+                "url" : "$pic_url2",
+                "width" : 600,
+                "height" : 600
+            }
         },
         "keyboard" : {
             "type" : "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+            "buttons": [ "오늘 날씨",  "내일 날씨", "모레 날씨", "돌아가기"]
         }
     }
 EOD;
@@ -185,34 +268,69 @@ EOD;
     else if ( strpos($content, "모레 날씨") !== false ) {
     $moowon = weather(2);
     $final = $moowon[0] . $moowon[1] . $moowon[2] . $moowon[3] . $moowon[4] . $moowon[5] . $moowon[6] . $moowon[7]. $moowon[8];
+    $pic_url2 = "http://minyeon.com/MOOWON/touch/weather/";
+
+    // <----- 하늘 날씨 상태 ---->
+    $sky = $moowon[4];
+    $sky = str_replace(":","",$sky);
+    $sky = str_replace(" ","",$sky);
+    // <----- 강수 상태 ---->
+    $rain = $moowon[5];
+    $rain = str_replace(":","",$rain);
+    $rain = str_replace(" ","",$rain);
+    // <----- 하늘 날씨 상태 통합 ---->
+    $sky = str_replace("하늘상태구름많음","cloud",$sky);
+    $sky = str_replace("하늘상태맑음","sun",$sky);
+    $sky = str_replace("하늘상태구름조금","cloud",$sky);
+    $sky = str_replace("하늘상태흐림","mist",$sky);
+    // <----- 강수 상태 통합 ---->
+    $rain = str_replace("강수상태강수없음","none",$rain);
+    $rain = str_replace("강수상태비가대부분이며일부눈","rain",$rain);
+    $rain = str_replace("강수상태비","rain",$rain);
+    $rain = str_replace("강수상태눈이대부분이며일부비","snow",$rain);
+    $rain = str_replace("강수상태눈","snow",$rain);
+    // <----- 예외 처리 ------->
+    if(strpos($rain,"none") !== false) {
+    $pic_url2 = $pic_url2.$sky.".png";
+  }
+  else{
+    $pic_url2 = $pic_url2.$rain.".png";
+  }
 echo <<< EOD
     {
         "message": {
-            "text": "$final"
+            "text": "$final",
+            "photo" : {
+                "url" : "$pic_url2",
+                "width" : 600,
+                "height" : 600
+            }
         },
         "keyboard" : {
             "type" : "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+            "buttons": ["오늘 날씨",  "내일 날씨", "모레 날씨", "돌아가기"]
         }
     }
 EOD;
     }
 
+    
     // include 시간표
     else if($content=="시간표"){
 echo <<< EOD
     {
         "message": {
-            "text": "학년을 선택 해 주세요!"
+            "text": "api 준비중입니다. 기달려주세요."
         },
         "keyboard": { 
             "type": "buttons",
-            "buttons": [ "1학년", "2학년", "3학년", "돌아가기" ]
+            "buttons": [ "대화 start" ]
         }
     }
 EOD;
     }
 
+    /*
     // include 1학년
     else if($content=="1학년"){
 echo <<< EOD
@@ -782,6 +900,7 @@ echo <<< EOD
     }
 EOD;
     }
+    */
 
     // include 게임전적
     else if(strpos($content, "게임 전적") !== false){
@@ -797,7 +916,7 @@ echo <<< EOD
     }
 EOD;
     }
-
+    
     // include LOL
     else if(strpos($content, "League of Legends") !== false){
 echo <<< EOD
@@ -809,7 +928,7 @@ echo <<< EOD
 EOD;
     }
     else if ( strpos($content, " ") !== false ) {
-        $username = str_replace(' ', '', $content);
+        $username = str_replace(" "," ",$content); // str_replace("찾을문자열","변경할문자열","문자열 원본")
         $return = lol_record($username);
         $logfile = fopen("log.txt", 'a') or die();
         fwrite($logfile, date("Y.m.d H:i:s",time()) . " '" . $username . "' 소환사를 검색했습니다(롤).\n");
@@ -828,13 +947,13 @@ echo <<< EOD
         "keyboard" :
         {
             "type" : "buttons",
-            "buttons" : [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+            "buttons" : [ "League of Legends", "PUBG", "돌아가기" ]
         }
     }
 EOD;
         }
         else{ // 유효한 소환사명 => message_button 표시 O
-          $pic_url = "http:\/\/minyeon.com\/MOOWON\/\/touch\/opggtier\/";
+          $pic_url = "http://minyeon.com/MOOWON/touch/opggtier/";
           $tier = strtolower($tier);
           $tier = str_replace(' ', '_', $tier);
           $pic_url = $pic_url . $tier . ".png";
@@ -857,7 +976,7 @@ echo <<< EOD
       "keyboard" :
       {
         "type" : "buttons",
-        "buttons" : [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+        "buttons" : [ "League of Legends", "PUBG", "돌아가기" ]
       }
   }
 EOD;
@@ -872,22 +991,22 @@ echo <<< EOD
         },
         "keyboard": { 
             "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+            "buttons": ["League of Legends", "PUBG", "돌아가기" ]
         }
     }
 EOD;
     }
 
-    // include 날씨
-    else if($content=="개발자"){
+    // include 정보
+    else if($content=="정보"){
 echo <<< EOD
     {
         "message": {
-            "text": "이 챗봇은 1학년 7반 이정민이 개발했어.\\n 개선사항이나 기능 추가를 원한다면 E-Mail : binse@inpase.io나 페메로 보내주세요!"
+            "text": "이 챗봇은 급식정보 , 날씨정보, 게임 전적, 학사일정 등을 알려줍니다.\\n개선사항이나 기능 추가를 원한다면 E-Mail : binse@inpase.io나 페메로 보내주세요!"
         },
         "keyboard": {
             "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+            "buttons": [ "대화 start" ]
         }
     }
 EOD;
@@ -903,7 +1022,7 @@ echo <<< EOD
     },
     "keyboard": { 
         "type": "buttons",
-        "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
+        "buttons": [ "대화 start" ]
     }    
 EOD;
 }

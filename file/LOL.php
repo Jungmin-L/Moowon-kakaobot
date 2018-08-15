@@ -123,4 +123,4 @@ function lol_record($username){
   $return[2] = $rank; // 티어
   return $return;
 }
- ?>
+?>

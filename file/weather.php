@@ -9,12 +9,14 @@ function weather($num)
   $snoopy = new Snoopy;
   $snoopy->fetch($URL);
 
-  preg_match('/<body>(.*?)<\/body>/is', $snoopy->results, $body);
-  $d0_data = $body[0];
+  preg_match('/<body>(.*?)<\/body>/is', $snoopy->results, $body); // url에서body부분 파싱
+  $d0_data = $body[0]; 
+
   $date = intval($num) * intval(7);
   $month = date("m");
-  $day = date("d", strtotime("+$num days"));
+  $day = date("d", strtotime("+$num days")); 
   $re = "/<data seq=\"" . $date . "\">(.*?)<\/data>/is";
+
   preg_match($re, $d0_data, $d0_data);  $d0_data = $d0_data[0];
   preg_match('/<temp>(.*?)<\/temp>/is', $d0_data, $temp_now);  $temp_now = $temp_now[0];
   preg_match('/<tmx>(.*?)<\/tmx>/is', $d0_data, $temp_max);  $temp_max = $temp_max[0];
