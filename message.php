@@ -8,6 +8,10 @@
 
     // include 대화 start
     if ( strcmp($content, "대화 start") == false ) {
+        $logfile = fopen("log.txt", 'a') or die();
+        fwrite($logfile, date("Y.m.d H:i:s",time()) . "사용자가 대화를 시작했습니다.\n");
+        // 검색 시간과 기록이 로그 파일에 기록됨
+        fclose($logfile);
         echo json_encode(
             array(
                 'message' => array(
@@ -16,7 +20,7 @@
                 'keyboard' => array(
                     'type' => 'buttons',
                     'buttons' => array(
-                        '급식', '학사 일정', '시간표', '날씨', '게임 전적', '정보'
+                        '급식', '학사 일정', '시간표', '날씨', '개선방안', '게임 전적', '정보'
                     )
                 )
             )
@@ -24,22 +28,32 @@
     }
 
     // include 돌아가기
-    else if(strpos($content, "돌아가기") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "취소 하셨습니다. 메인메뉴로 돌아갑니다."
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "대화 start" ]
-        }
-    }
-EOD;
+    else if ( strcmp($content, "돌아가기") == false ) {
+        $logfile = fopen("log.txt", 'a') or die();
+        fwrite($logfile, date("Y.m.d H:i:s",time()) . "사용자가 돌아가기를 했습니다.\n");
+        // 검색 시간과 기록이 로그 파일에 기록됨
+        fclose($logfile);
+        echo json_encode(
+            array(
+                'message' => array(
+                    'text' => '취소 하셨습니다. 메인메뉴로 돌아갑니다',
+                ),
+                'keyboard' => array(
+                    'type' => 'buttons',
+                    'buttons' => array(
+                        '대화 start'
+                    )
+                )
+            )
+        );
     }
 
     // include 급식
     else if($content=="급식"){
+        $logfile = fopen("log.txt", 'a') or die();
+        fwrite($logfile, date("Y.m.d H:i:s",time()) . "사용자가 급식를 조회했습니다.\n");
+        // 검색 시간과 기록이 로그 파일에 기록됨
+        fclose($logfile);
 echo <<< EOD
     {
         "message": {
@@ -103,6 +117,10 @@ EOD;
 
     // include 학사일정
     else if($content=="학사 일정"){
+        $logfile = fopen("log.txt", 'a') or die();
+        fwrite($logfile, date("Y.m.d H:i:s",time()) . "사용자가 학사일정를 조회했습니다.\n");
+        // 검색 시간과 기록이 로그 파일에 기록됨
+        fclose($logfile);
 echo <<< EOD
     {
         "message": {
@@ -152,6 +170,10 @@ EOD;
 
     // include 날씨
     else if($content=="날씨"){
+        $logfile = fopen("log.txt", 'a') or die();
+        fwrite($logfile, date("Y.m.d H:i:s",time()) . "사용자가 날씨를 조회했습니다.\n");
+        // 검색 시간과 기록이 로그 파일에 기록됨
+        fclose($logfile);
 echo <<< EOD
     {
         "message": {
@@ -169,7 +191,7 @@ EOD;
     else if ( strpos($content, "오늘 날씨") !== false ) {
     $moowon = weather(0);
     $final = $moowon[0] . $moowon[1] . $moowon[2] . $moowon[3] . $moowon[4] . $moowon[5] . $moowon[6] . $moowon[7]. $moowon[8];
-    $pic_url2 = "http://minyeon.com/MOOWON/touch/weather/";
+    $pic_url2 = "http://jungminl.com/MOOWON/touch/weather/";
 
     // <----- 하늘 날씨 상태 ---->
     $sky = $moowon[4];
@@ -218,7 +240,7 @@ EOD;
     else if ( strpos($content, "내일 날씨") !== false ) {
     $moowon = weather(1);
     $final = $moowon[0] . $moowon[1] . $moowon[2] . $moowon[3] . $moowon[4] . $moowon[5] . $moowon[6] . $moowon[7]. $moowon[8];
-    $pic_url2 = "http://minyeon.com/MOOWON/touch/weather/";
+    $pic_url2 = "http://jungminl.com/MOOWON/touch/weather/";
 
     // <----- 하늘 날씨 상태 ---->
     $sky = $moowon[4];
@@ -268,7 +290,7 @@ EOD;
     else if ( strpos($content, "모레 날씨") !== false ) {
     $moowon = weather(2);
     $final = $moowon[0] . $moowon[1] . $moowon[2] . $moowon[3] . $moowon[4] . $moowon[5] . $moowon[6] . $moowon[7]. $moowon[8];
-    $pic_url2 = "http://minyeon.com/MOOWON/touch/weather/";
+    $pic_url2 = "http://jungminl.com/MOOWON/touch/weather/";
 
     // <----- 하늘 날씨 상태 ---->
     $sky = $moowon[4];
@@ -317,6 +339,10 @@ EOD;
     
     // include 시간표
     else if($content=="시간표"){
+        $logfile = fopen("log.txt", 'a') or die();
+        fwrite($logfile, date("Y.m.d H:i:s",time()) . "사용자가 시간표를 조회했습니다.\n");
+        // 검색 시간과 기록이 로그 파일에 기록됨
+        fclose($logfile);
 echo <<< EOD
     {
         "message": {
@@ -329,578 +355,6 @@ echo <<< EOD
     }
 EOD;
     }
-
-    /*
-    // include 1학년
-    else if($content=="1학년"){
-echo <<< EOD
-    {
-        "message": {
-            "text": "반을 선택 해 주세요!"
-        },
-        "keyboard": {
-            "type": "buttons",
-            "buttons": [ "1학년 1반",  "1학년 2반",  "1학년 3반",  "1학년 4반",  "1학년 5반",  "1학년 6반", "1학년 7반", "1학년 8반", "1학년 9반", "1학년 10반", "1학년 11반", "1학년 12반", "돌아가기"]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 1반
-    else if(strpos($content, "1학년 1반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 2반
-    else if(strpos($content, "1학년 2반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 3반
-    else if(strpos($content, "1학년 3반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }   
-
-    // include 1학년 4반
-    else if(strpos($content, "1학년 4반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 5반
-    else if(strpos($content, "1학년 5반") !== false){
-echo <<< EOD
-{
-    "message": {
-        "text": "api 준비 중 입니다"
-    },
-    "keyboard": { 
-        "type": "buttons",
-        "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-    }
-}
-EOD;
-    }  
-
-    // include 1학년 6반
-    else if(strpos($content, "1학년 6반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 7반
-    else if(strpos($content, "1학년 7반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 8반
-    else if(strpos($content, "1학년 8반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 9반
-    else if(strpos($content, "1학년 9반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 10반
-    else if(strpos($content, "1학년 10반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 11반
-    else if(strpos($content, "1학년 11반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 1학년 12반
-    else if(strpos($content, "1학년 12반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-
-    // include 2학년
-    else if($content=="2학년"){
-echo <<< EOD
-    {
-        "message": {
-            "text": "반을 선택 해 주세요!"
-        },
-        "keyboard": {
-            "type": "buttons",
-            "buttons": [ "2학년 1반",  "2학년 2반",  "2학년 3반",  "2학년 4반",  "2학년 5반",  "2학년 6반", "2학년 7반", "2학년 8반", "2학년 9반", "2학년 20반", "2학년 11반", "2학년 12반", "돌아가기"]
-        }
-    }
-EOD;
-    }
-
-    // include 2학년 1반
-    else if(strpos($content, "2학년 1반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 2반
-    else if(strpos($content, "2학년 2반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 3반
-    else if(strpos($content, "2학년 3반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }   
-    
-    // include 2학년 4반
-    else if(strpos($content, "2학년 4반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 5반
-    else if(strpos($content, "2학년 5반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }  
-    
-    // include 2학년 6반
-    else if(strpos($content, "2학년 6반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-       },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 7반
-    else if(strpos($content, "2학년 7반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 8반
-    else if(strpos($content, "2학년 8반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 9반
-    else if(strpos($content, "2학년 9반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 10반
-    else if(strpos($content, "2학년 10반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 11반
-    else if(strpos($content, "2학년 11반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 2학년 12반
-    else if(strpos($content, "2학년 12반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    
-    // include 3학년
-    else if($content=="3학년"){
-echo <<< EOD
-    {
-        "message": {
-            "text": "반을 선택 해 주세요!"
-        },
-        "keyboard": {
-            "type": "buttons",
-            "buttons": [ "3학년 1반",  "3학년 2반",  "3학년 3반",  "3학년 4반",  "3학년 5반",  "3학년 6반", "3학년 7반", "3학년 8반", "3학년 9반", "3학년 10반", "3학년 11반", "돌아가기"]
-        }
-    }
-EOD;
-    }
-
-    // include 3학년 1반
-    else if(strpos($content, "3학년 1반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-        
-    // include 1학년 3반
-    else if(strpos($content, "3학년 2반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-        
-    // include 3학년 3반
-    else if(strpos($content, "3학년 3반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }   
-        
-    // include 3학년 4반
-    else if(strpos($content, "3학년 4반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-        
-    // include 3학년 5반
-    else if(strpos($content, "3학년 5반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }  
-        
-    // include 3학년 6반
-    else if(strpos($content, "3학년 6반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-       },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-        
-    // include 3학년 7반
-    else if(strpos($content, "3학년 7반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-        
-    // include 3학년 8반
-    else if(strpos($content, "3학년 8반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-        
-    // include 3학년 9반
-    else if(strpos($content, "3학년 9반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-        
-    // include 3학년 10반
-    else if(strpos($content, "3학년 10반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-        
-    // include 3학년 11반
-    else if(strpos($content, "3학년 11반") !== false){
-echo <<< EOD
-    {
-        "message": {
-            "text": "api 준비 중 입니다"
-        },
-        "keyboard": { 
-            "type": "buttons",
-            "buttons": [ "급식",  "학사 일정",  "시간표",  "날씨",  "게임 전적",  "개발자" ]
-        }
-    }
-EOD;
-    }
-    */
 
     // include 게임전적
     else if(strpos($content, "게임 전적") !== false){
@@ -922,14 +376,14 @@ EOD;
 echo <<< EOD
     {
         "message": {
-            "text": "전적이 필요한 소환사명을 검색해 주세요!\\nEX) Hide on bush"
+            "text": "전적이 필요한 소환사명을 검색해 주세요!(띄어쓰기가 없는 경우에는 아무대나 띄어쓰기를 해주세요)\\nEX) Hide on bush"
         }
     }
 EOD;
     }
     else if ( strpos($content, " ") !== false ) {
-        $username = str_replace(" "," ",$content); // str_replace("찾을문자열","변경할문자열","문자열 원본")
-        $return = lol_record($username);
+        $username = str_replace(" "," ",$content); // str_replace("찾을문자열","변경할문자열","문자열 원본") 
+        $return = lol_record($username); 
         $logfile = fopen("log.txt", 'a') or die();
         fwrite($logfile, date("Y.m.d H:i:s",time()) . " '" . $username . "' 소환사를 검색했습니다(롤).\n");
         // 검색 시간과 기록이 로그 파일에 기록됨
@@ -953,7 +407,7 @@ echo <<< EOD
 EOD;
         }
         else{ // 유효한 소환사명 => message_button 표시 O
-          $pic_url = "http://minyeon.com/MOOWON/touch/opggtier/";
+          $pic_url = "http://jungminl.com/MOOWON/touch/opggtier/";
           $tier = strtolower($tier);
           $tier = str_replace(' ', '_', $tier);
           $pic_url = $pic_url . $tier . ".png";
@@ -999,17 +453,40 @@ EOD;
 
     // include 정보
     else if($content=="정보"){
-echo <<< EOD
-    {
-        "message": {
-            "text": "이 챗봇은 급식정보 , 날씨정보, 게임 전적, 학사일정 등을 알려줍니다.\\n개선사항이나 기능 추가를 원한다면 E-Mail : binse@inpase.io나 페메로 보내주세요!"
-        },
-        "keyboard": {
-            "type": "buttons",
-            "buttons": [ "대화 start" ]
-        }
+        echo json_encode(
+            array(
+                'message' => array(
+                    'text' => '이 챗봇은 급식정보 , 날씨정보, 게임 전적, 학사일정 등을 알려줍니다.
+개선사항이나 기능 추가를 원한다면 E-Mail : binse@inpase.io나 페메로 보내주세요!',
+                ),
+                'keyboard' => array(
+                    'type' => 'buttons',
+                    'buttons' => array(
+                        '대화 start'
+                    )
+                )
+            )
+        );
     }
-EOD;
+
+    else if ( strpos($content, "개선방안") !== false ) {
+        $logfile = fopen("log.txt", 'a') or die();
+        fwrite($logfile, date("Y.m.d H:i:s",time()) . "사용자가 개선방안를 조회했습니다.\n");
+        // 검색 시간과 기록이 로그 파일에 기록됨
+        fclose($logfile);
+        echo json_encode(
+            array(
+                'message' => array(
+                    'text' => '학생회랑 이야기가 필요합니다. 기달려 주세요.',
+                ),
+                'keyboard' => array(
+                    'type' => 'buttons',
+                    'buttons' => array(
+                        '대화 start'
+                    )
+                )
+            )
+        );
     }
 
     // 그 외
@@ -1017,7 +494,7 @@ EOD;
 echo <<< EOD
     {
         "message": {
-            "text": "개발 중인 탭 입니다."
+            "text": "에러가 발생했거나 미개발 탭인듯 합니다. 연락주세요."
         }
     },
     "keyboard": { 
