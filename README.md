@@ -33,7 +33,6 @@ MOOWONby kakaotalk bot
 ** 참조 자료 **
 # Eunyeoul Kakaotalk Mealbot with PHP
 # ghhs-siri-kakao-master 
-# KGHS_Chatbot_HDF
 
 
 
